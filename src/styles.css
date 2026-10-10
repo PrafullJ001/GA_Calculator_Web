@@ -62,10 +62,10 @@ button, input { font: inherit; color: inherit; }
 .pcard::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 10px; }
 .pcard--solid::before { background: linear-gradient(180deg, #3fa65a, #1f7a3a); }
 .pcard--liquid::before { background: linear-gradient(180deg, #2cc4b0, #0e6f7a); }
-.pcard__name { font-size: clamp(1.3rem, 5.2vw, 1.7rem); font-weight: 400; line-height: 1.2; letter-spacing: -0.02em; color: var(--ink); }
+.pcard__name { font-size: clamp(1.3rem, 5.2vw, 1.7rem); font-weight: 500; line-height: 1.2; letter-spacing: -0.02em; color: #071a0e; }
 .pcard__name strong { font-weight: 800; }
-.pcard--solid .pcard__name strong { color: #1f7a3a; }
-.pcard--liquid .pcard__name strong { color: #0e6f7a; }
+.pcard--solid .pcard__name strong { color: #14602b; }
+.pcard--liquid .pcard__name strong { color: #0a5a64; }
 .pcard__cta {
   flex: none; display: inline-flex; align-items: center; justify-content: center;
   min-height: 54px; padding: 0 26px; border-radius: 999px;
@@ -135,7 +135,7 @@ button, input { font: inherit; color: inherit; }
 .install--help { background: var(--white); border: 1px solid var(--line); border-radius: 14px; padding: 6px 6px 6px 14px; }
 .install--help p { flex: 1; margin: 0; font-size: .9rem; color: var(--muted); }
 
-/* Mobile: cards fill the whole screen, install button stays visible (no scrolling) */
+/* Mobile: cards fill the screen, install button is always visible (no scrolling) */
 @media (max-width: 719px) {
   .app { display: flex; flex-direction: column; }
   .home { flex: 1; display: flex; flex-direction: column; }
@@ -144,7 +144,14 @@ button, input { font: inherit; color: inherit; }
   .pcard { min-height: 120px; padding: 16px 16px 16px 30px; }
   .pcard__name { font-size: clamp(1.5rem, 6.4vw, 2rem); }
   .pcard__cta { min-height: 58px; padding: 0 30px; font-size: 1.1rem; }
-  .install { margin-top: 14px; }
+
+  /* install button stays fixed at the bottom of the screen */
+  .install {
+    position: fixed; left: calc(18px + env(safe-area-inset-left)); right: calc(18px + env(safe-area-inset-right));
+    bottom: calc(12px + env(safe-area-inset-bottom)); margin-top: 0; z-index: 50; background: var(--mist);
+  }
+  .install.install--help { background: var(--white); }
+  body:has(.install) .app { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
 }
 
 @media (min-width: 700px) {
