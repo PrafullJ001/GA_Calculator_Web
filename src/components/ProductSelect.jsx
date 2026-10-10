@@ -10,14 +10,14 @@ function LeafMark() {
 }
 
 function ProductCard({ product, accent, onSelect }) {
-  // "ProGibb Easy GA" -> light part "ProGibb", bold coloured part "Easy GA"
-  const rest = product.name.replace(/^ProGibb\s*/, '');
   return (
-    <button type="button" className={`pcard pcard--${accent}`} onClick={() => onSelect(product.id)}>
-      <span className="pcard__name">
-        ProGibb <strong>{rest}</strong>
+    <button type="button" className={`tile tile--${accent}`} onClick={() => onSelect(product.id)}>
+      <span className="tile__name">{product.name}</span>
+      <span className="tile__go">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </span>
-      <span className="pcard__cta">Select</span>
     </button>
   );
 }
@@ -25,18 +25,16 @@ function ProductCard({ product, accent, onSelect }) {
 export default function ProductSelect({ onSelect }) {
   return (
     <section className="screen home" aria-labelledby="home-title">
-      <div className="hero-panel">
-        <div className="masthead">
-          <span className="masthead__brand"><LeafMark /> ProGibb GA</span>
-          <span className="masthead__label">Dosage Calculator</span>
-        </div>
-        <h1 id="home-title"><span className="hero-ga">GA</span> Calculator</h1>
-        <p className="hero-panel__sub">Calculate the required dosage for your farm.</p>
+      <div className="home__top">
+        <span className="home__logo"><LeafMark /></span>
+        ProGibb GA
       </div>
+      <h1 id="home-title" className="home__title"><span>GA</span> Calculator</h1>
+      <p className="home__sub">Choose your product to get the dosage.</p>
 
-      <div className="pgrid">
-        <ProductCard product={PRODUCTS.solid} accent="solid" onSelect={onSelect} />
-        <ProductCard product={PRODUCTS.liquid} accent="liquid" onSelect={onSelect} />
+      <div className="tiles">
+        <ProductCard product={PRODUCTS.solid} accent="a" onSelect={onSelect} />
+        <ProductCard product={PRODUCTS.liquid} accent="b" onSelect={onSelect} />
       </div>
     </section>
   );
