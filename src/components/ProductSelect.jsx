@@ -9,10 +9,14 @@ function LeafMark() {
   );
 }
 
+// Show only the product name. Any "Solid" / "Liquid" word is removed.
+const cleanName = (name) =>
+  String(name).replace(/\s*[([\-–:]?\s*\b(solid|liquid)\b\s*[)\]]?/gi, '').trim();
+
 function ProductCard({ product, accent, onSelect }) {
   return (
     <button type="button" className={`tile tile--${accent}`} onClick={() => onSelect(product.id)}>
-      <span className="tile__name">{product.name}</span>
+      <span className="tile__name">{cleanName(product.name)}</span>
       <span className="tile__go">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
