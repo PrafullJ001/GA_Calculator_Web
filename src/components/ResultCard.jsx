@@ -3,7 +3,7 @@ export default function ResultCard({ product, ppm, grams, acresText }) {
     <section className="result" aria-live="polite" aria-label="Result">
       <p className="result__label">Required Quantity</p>
       <p className="result__value">
-        {grams.toFixed(2)} <span>grams (g)</span>
+        {grams.toFixed(2)} <span>gm</span>
       </p>
       <dl className="result__meta">
         <div><dt>Product</dt><dd>{product.name}</dd></div>

@@ -22,12 +22,23 @@ export default function Calculator({ productId, onBack }) {
   const [ac, setAc] = useState('');
   const [ppmRaw, setPpmRaw] = useState('');
   const [touched, setTouched] = useState({ area: false, ppm: false });
-  const [result, setResult] = useState(null); // filled only after pressing Calculate Dosage
+  const [result, setResult] = useState(null); // filled only after pressing Calculate
   const firstInput = useRef(null);
-  const resultRef = useRef(null);
+  const againBtn = useRef(null);
 
+  // Phone Back button / gesture closes the result window and returns to the form.
   useEffect(() => {
-    if (result) resultRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' });
+    const onPop = (e) => { if (!e.state?.result) setResult(null); };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
+  // When the result window opens: go to the top and focus its button.
+  useEffect(() => {
+    if (result) {
+      window.scrollTo?.(0, 0);
+      againBtn.current?.focus();
+    }
   }, [result]);
 
   const touch = (k) => setTouched((t) => (t[k] ? t : { ...t, [k]: true }));
@@ -64,6 +75,7 @@ export default function Calculator({ productId, onBack }) {
     e.preventDefault();
     setTouched({ area: true, ppm: true });
     if (!valid) { setResult(null); return; }
+    window.history.pushState({ product: productId, result: true }, '');
     setResult({
       grams: requiredGrams(acres, ppmParsed.value, product.factor),
       acresText: formatNumber(acres, 4),
@@ -72,11 +84,29 @@ export default function Calculator({ productId, onBack }) {
   }
 
   function reset() {
+    const wasOpen = Boolean(result);
     setR(''); setAc(''); setPpmRaw(''); setSource('ac');
     setTouched({ area: false, ppm: false });
     setResult(null);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    firstInput.current?.focus();
+    if (wasOpen && window.history.state?.result) window.history.back(); // drop the result entry
+    window.scrollTo?.({ top: 0, behavior: 'smooth' });
+    setTimeout(() => firstInput.current?.focus(), 0);
+  }
+
+  // Full-screen result window
+  if (result) {
+    return (
+      <section className="screen result-screen" role="dialog" aria-modal="true" aria-labelledby="result-title">
+        <h1 id="result-title" className="result-screen__title">Dosage Result</h1>
+        <ResultCard
+          product={product}
+          acresText={result.acresText}
+          ppm={result.ppmText}
+          grams={result.grams}
+        />
+        <button type="button" ref={againBtn} className="btn btn--light" onClick={reset}>Check Another</button>
+      </section>
+    );
   }
 
   return (
@@ -127,21 +157,10 @@ export default function Calculator({ productId, onBack }) {
         </label>
 
         <div className="actions">
-          <button type="submit" className="btn btn--primary">Calculate Dosage</button>
+          <button type="submit" className="btn btn--primary">Calculate</button>
           <button type="button" className="btn btn--ghost" onClick={reset}>Check Another</button>
         </div>
       </form>
-
-      {result && (
-        <div ref={resultRef}>
-          <ResultCard
-            product={product}
-            acresText={result.acresText}
-            ppm={result.ppmText}
-            grams={result.grams}
-          />
-        </div>
-      )}
     </section>
   );
 }

@@ -39,7 +39,7 @@ button, input { font: inherit; color: inherit; }
 .home__logo svg { width: 26px; height: 26px; }
 .home__title { margin: 26px 0 6px; font-size: clamp(2.1rem, 10vw, 2.8rem); line-height: 1.02; letter-spacing: -0.03em; font-weight: 900; }
 .home__title span { background: linear-gradient(90deg, #1f7a3a, #2cb36b); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.home__sub { margin: 0 0 22px; color: var(--muted); font-size: 1.05rem; }
+.home__sub { margin: 0 0 22px; color: #000; font-size: 1.05rem; }
 
 .tiles { display: grid; gap: 14px; }
 .tile {
@@ -82,14 +82,17 @@ button, input { font: inherit; color: inherit; }
 .field input[aria-invalid='true'] { border-color: var(--err); }
 .error { margin: 6px 0 0; color: var(--err); font-size: .92rem; font-weight: 600; }
 
-/* Actions */
-.actions { display: grid; gap: 10px; }
-.btn { min-height: 56px; border-radius: 16px; font-size: 1.1rem; font-weight: 800; cursor: pointer; border: 2px solid transparent; }
-.btn--primary { background: var(--btn); color: var(--on-btn); box-shadow: 0 6px 16px rgba(31, 122, 58, .3); }
+/* Actions: every button is a full-width row */
+.actions { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.btn {
+  width: 100%; min-height: 60px; border-radius: 18px; font-size: 1.1rem; font-weight: 800; letter-spacing: .01em;
+  cursor: pointer; border: 2px solid transparent; transition: transform .12s, background .15s, box-shadow .15s;
+}
+.btn:active { transform: scale(.985); }
+.btn--primary { background: var(--btn); color: var(--on-btn); box-shadow: 0 8px 20px rgba(31, 122, 58, .3); }
 .btn--primary:active { background: var(--btn-active); }
-.btn--ghost { background: transparent; color: var(--leaf-dark); border-color: var(--line); }
-.btn--ghost:active { background: var(--tint); }
-@media (min-width: 480px) { .actions { grid-template-columns: 1.4fr 1fr; } }
+.btn--ghost { background: var(--tint); color: var(--leaf-dark); }
+.btn--ghost:active { background: #d6ebce; }
 
 /* Result */
 .result { margin-top: 18px; padding: 20px; border-radius: var(--radius); background: var(--ink); color: var(--white); box-shadow: var(--shadow); animation: swap .2s ease-out; }
@@ -124,4 +127,31 @@ button, input { font: inherit; color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   .screen, .result { animation: none; }
   .tile { transition: none; }
+}
+
+/* Full-screen result window (opens when you press Calculate) */
+.result-screen {
+  position: fixed; inset: 0; z-index: 40; overflow-y: auto;
+  display: flex; flex-direction: column; align-items: center; gap: 18px;
+  padding: calc(24px + env(safe-area-inset-top)) calc(18px + env(safe-area-inset-right))
+    calc(24px + env(safe-area-inset-bottom)) calc(18px + env(safe-area-inset-left));
+  background:
+    radial-gradient(520px 320px at 100% 0, var(--glow), transparent 70%),
+    linear-gradient(160deg, var(--hero1) 0%, var(--hero2) 100%);
+}
+.result-screen > * { width: 100%; max-width: 520px; }
+.result-screen > :first-child { margin-top: auto; }
+.result-screen > :last-child { margin-bottom: auto; }
+.result-screen__title { margin: 0; text-align: center; font-size: .85rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--on-dark); }
+.result-screen .result { margin-top: 0; padding: 28px 24px; background: var(--white); color: var(--ink); box-shadow: 0 20px 50px rgba(0, 0, 0, .28); }
+.result-screen .result__label { color: var(--muted); font-weight: 600; }
+.result-screen .result__value { font-size: clamp(2.8rem, 15vw, 4.2rem); color: var(--leaf-dark); }
+.result-screen .result__value span { color: var(--ink); font-size: .55em; font-weight: 800; letter-spacing: .02em; margin-left: .12em; }
+.result-screen .result__meta { border-top-color: var(--line); }
+.result-screen .result__meta dt { color: var(--muted); }
+.result-screen .result__meta dd { color: var(--ink); }
+.btn--light { min-height: 64px; border-radius: 20px; font-size: 1.15rem; background: var(--white); color: var(--leaf-dark); box-shadow: 0 12px 28px rgba(0, 0, 0, .25); }
+.btn--light:active { background: var(--tint); }
+@media (max-width: 719px) {
+  body:has(.install) .result-screen { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
 }
