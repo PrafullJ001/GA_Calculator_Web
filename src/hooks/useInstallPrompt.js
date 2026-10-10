@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 const KEY = 'progibb-install-dismissed';
+const HIDE_MS = 24 * 60 * 60 * 1000; // a dismissed bar stays hidden for 1 day only
 
 const isStandalone = () =>
   window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true;
@@ -13,7 +14,11 @@ const readDismissed = () => {
   // Opened as an installed app: forget the old "dismissed" note,
   // so the install button comes back after the app is deleted.
   if (isStandalone()) { clearDismissed(); return false; }
-  try { return localStorage.getItem(KEY) === '1'; } catch { return false; }
+  // Old saved value ('1') counts as expired, so the button comes back.
+  try {
+    const t = Number(localStorage.getItem(KEY));
+    return t > 0 && Date.now() - t < HIDE_MS;
+  } catch { return false; }
 };
 
 export function useInstallPrompt() {
@@ -40,7 +45,7 @@ export function useInstallPrompt() {
 
   const dismiss = useCallback(() => {
     setDismissed(true);
-    try { localStorage.setItem(KEY, '1'); } catch { /* storage unavailable */ }
+    try { localStorage.setItem(KEY, String(Date.now())); } catch { /* storage unavailable */ }
   }, []);
 
   const install = useCallback(async () => {
