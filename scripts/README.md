@@ -1,0 +1,1 @@
+"# GA Calculator Web`nMobile-first React PWA to calculate ProGibb GA dosage. Run: npm install, npm run icons, npm run dev." | Out-File -Encoding utf8 README.md
