@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "ProGibb GA Calculator",
-  "short_name": "ProGibb GA",
-  "description": "Calculate the required ProGibb GA dosage for your farm.",
+  "name": "GA Calculator",
+  "short_name": "GA Calculator",
+  "description": "Calculate the required GA dosage for your farm.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
