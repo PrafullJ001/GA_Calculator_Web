@@ -115,8 +115,10 @@ button, input { font: inherit; color: inherit; }
 @media (max-width: 719px) {
   .install {
     position: fixed; left: calc(18px + env(safe-area-inset-left)); right: calc(18px + env(safe-area-inset-right));
-    bottom: calc(12px + env(safe-area-inset-bottom)); margin-top: 0; z-index: 50; background: var(--mist);
+    bottom: calc(12px + env(safe-area-inset-bottom)); margin-top: 0; z-index: 50; background: transparent;
   }
+  .install__btn { background: var(--mist); }
+  .install:not(.install--help) .install__close { background: var(--mist); }
   .install.install--help { background: var(--white); }
   body:has(.install) .app { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
 }
