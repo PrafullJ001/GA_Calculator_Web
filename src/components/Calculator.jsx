@@ -79,6 +79,7 @@ export default function Calculator({ productId, onBack }) {
     setResult({
       grams: requiredGrams(acres, ppmParsed.value, product.factor),
       acresText: formatNumber(acres, 4),
+      rText: formatNumber(acreToR(acres), 4),
       ppmText: formatNumber(ppmParsed.value, 4),
     });
   }
@@ -101,6 +102,7 @@ export default function Calculator({ productId, onBack }) {
         <ResultCard
           product={product}
           acresText={result.acresText}
+          rText={result.rText}
           ppm={result.ppmText}
           grams={result.grams}
         />
@@ -117,7 +119,7 @@ export default function Calculator({ productId, onBack }) {
         </button>
       </div>
 
-      <h1 id="calc-title" className="calc-title">{product.name}</h1>
+      <h1 id="calc-title" className="calc-title">{product.name.replace(/\s*\([^)]*\)\s*$/, '')}</h1>
 
       <form className="card" onSubmit={onSubmit} noValidate>
         <fieldset className="area">
